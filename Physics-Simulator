@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #contenedor {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            background-color: yellow;
+        }
+
+        #objeto {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <p><button onclick="mover()">Throw</button></p>
+    <p> Force: <input id="force" type="number" /></p>
+    <p> Direction (Degrees): <input id="dir" type="number" /></p>
+    <p>Elasticity: (0-1)<input id="elast" type="text"/></p>
+    <div id="contenedor">
+        <div id="objeto"></div>
+    </div>
+    <script>
+        function mover() {
+            var element = document.getElementById("objeto");
+            var force = parseInt(document.getElementById("force").value);
+            var dir = -parseInt(document.getElementById("dir").value);
+            var elast = parseFloat(document.getElementById("elast").value) * 0.33333;
+            var rads = dir * Math.PI / 180;
+            var v0X = Math.cos(rads) * force;
+            var v0Y = Math.sin(rads) * force;
+            var vY = 0;
+            var xPos = 0;
+            var yPos = 0;
+            var x = 0;
+            var y = 0;
+            var time = 0;
+            var bounces = 0;
+            var id = setInterval(frame, 5);
+            function frame() {
+                if (yPos >= 350) {
+                    if(bounces >= 8)
+                    {
+                        clearInterval(id);
+                    }
+                    v0Y = elast * vY;
+                    time = 0;
+                    x = xPos;
+                    y = yPos;
+                    updatePos();
+                    bounces++;
+                } else {
+                    vY = v0Y - 9.8 * time;
+                    updatePos();
+                }
+            }
+            function updatePos()
+            {
+                time += 0.05;
+                xPos = v0X * time + x;
+                yPos = v0Y * time + 4.9 * (time**2) + y;
+                element.style.top = yPos + "px";
+                element.style.left = xPos + "px";
+            }
+        }
+    </script>
+</body>
+</html>
