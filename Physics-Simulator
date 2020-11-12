@@ -51,10 +51,10 @@
                     {
                         clearInterval(id);
                     }
-                    v0Y = elast * vY;
+                    v0Y = -Math.abs(elast * vY);
                     time = 0;
                     x = xPos;
-                    y = yPos;
+                    y = 350;
                     updatePos();
                     bounces++;
                 } else {
