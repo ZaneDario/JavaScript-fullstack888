@@ -21,8 +21,9 @@
     </style>
 </head>
 <body>
-    <p><button onclick="mover()">Throw</button></p> 
-    <p> Force: <input id="force" type="number" /></p>
+    <p><button onclick="mover()">Throw</button><b><text id="distance"> --> 0 meters!</text></b> 
+        <button onclick="scrollToBall()">Go to the "ball".</button></p> 
+    <p> Initial Speed: <input id="force" type="number" /></p>
     <p> Direction (Degrees): <input id="dir" type="number" /></p>
     <p>Elasticity: (0-1)<input id="elast" type="text"/></p>
     <p><select size="4" onchange="setGravity(this)">
@@ -40,25 +41,30 @@
     </select> <button onclick="moveToSmartConversionLink()">Go to Source</button>
     </p>
     <div id="contenedor">
-        <div id="objeto"></div>
+        <div id="objeto" style="float: right;"></div>
+        <span id="iframe" style="float: left;"></span> 
     </div>
+    
     <script>
-        var g;
+        var iframeParent = document.getElementById("iframe");
+        var g = 9.8;
+        var xPos = 0;
+        var yPos = 0;
         function setGravity(selectTag)
         {
             g = parseFloat(selectTag.options[selectTag.selectedIndex].value);
         }
         function mover() {
             var element = document.getElementById("objeto");
-            var force = parseInt(document.getElementById("force").value);
-            var dir = -parseInt(document.getElementById("dir").value);
+            var force = document.getElementById("force").value;
+            var dir = -document.getElementById("dir").value;
             var elast = parseFloat(document.getElementById("elast").value) * 0.33333;
+            xPos = 0;
+            yPos = 0;
             var rads = dir * Math.PI / 180;
             var v0X = Math.cos(rads) * force;
             var v0Y = Math.sin(rads) * force;
             var vY = 0;
-            var xPos = 0;
-            var yPos = 0;
             var x = 0;
             var y = 0;
             var time = 0;
@@ -66,8 +72,10 @@
             var id = setInterval(frame, 5);
             function frame() {
                 if (yPos >= 350) {
-                    if(bounces >= 8)
+                    if(bounces >= 10)
                     {
+                        document.getElementById("distance").innerHTML = " --> " + (Math.round(xPos) - 50) + " meters!";
+                        showIFrame();
                         clearInterval(id);
                     }
                     v0Y = -Math.abs(elast * vY);
@@ -90,9 +98,26 @@
                 element.style.left = xPos + "px";
             }
         }
+        function scrollToBall()
+        {
+            window.scrollTo(xPos, yPos);
+        }
         function moveToSmartConversionLink()
         {
-            window.open("https://www.smartconversion.com/otherInfo/gravity_of_planets_and_the_sun.aspx");
+            window.open("https://www.smartconversion.com/otherInfo/gravity_of_planets_and_the_sun.aspx","_blank", "width=500, height=500");
+        }
+        function showIFrame()
+        { 
+            if(iframeParent.hasChildNodes())
+            {
+                iframeParent.removeChild(iframeParent.firstChild);
+            }
+            var src = "https://www.bing.com/search?q=distance+"+(Math.round(xPos)-50);
+            var iframe = document.createElement('iframe');
+            iframe.src = src;
+            iframe.width = 500;
+            iframe.height = 250;
+            iframeParent.append(iframe);
         }
     </script>
 </body>
