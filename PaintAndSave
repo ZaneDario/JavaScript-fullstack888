@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #object {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            background-color: black;
+        }
+        #colorViewer {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <p><input type="text" id="text" onkeydown="onKeyDown(event.keyCode)"><button onclick="paint()">Texto to Drawing</button></p>
+    <div id="object"></div>
+    <div id="colorViewer"></div>
+    <script>
+        var colorViewer = document.getElementById("colorViewer");
+        var object = document.getElementById("object");
+        var xPos = 0;
+        var yPos = 0;
+        var color = 'green';
+        function onKeyDown(key){
+
+            if(key == '65'){
+                xPos -= 50;
+            }
+            if(key == '68'){
+                xPos += 50;
+            }
+            if(key == '87'){
+                yPos -= 50;
+            }
+            if(key == '83'){
+                yPos += 50;
+            }
+            object.style.left = xPos + "px";
+            object.style.top = yPos + "px";
+
+            if(key == '32'){
+                var clone = document.createElement('div');
+                clone.style.width = "25px";
+                clone.style.height = "25px"; //works
+                clone.style.position = "absolute";
+                clone.style.backgroundColor = color; //This one works.
+                document.body.appendChild(clone);
+                clone.style.left = xPos + 12.5 +"px";
+                clone.style.top = yPos + 12.5+"px";
+            }
+
+            if(key == '97'|| (key == '49')){
+                color = 'red';
+            }
+            if(key == '98'|| (key == '50')){
+                color = 'green';
+            }
+            if(key == '99'|| (key == '51')){
+                color = 'blue';
+            }
+            if(key == '100'|| (key == '52')){
+                color = 'orange';
+            }
+            if(key == '101'|| (key == '53')){
+                color = 'yellow';
+            }
+            if(key == '102'|| (key == '54')){
+                color = 'brown';
+            }
+            if(key == '96' || (key == '48')){
+                color = 'white';
+            }
+            colorViewer.style.backgroundColor = color;
+        }
+
+        function paint()
+        {
+            var paintCode = document.getElementById("text").value;
+            paintCode = paintCode.toUpperCase();
+            for(let i = 0; i < paintCode.length; i++)
+            {
+                onKeyDown(paintCode.charCodeAt(i))
+            }
+        
+        }
+    </script>
+</body>
+</html>
